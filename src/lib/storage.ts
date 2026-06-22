@@ -1,17 +1,18 @@
-import type { Vehicle } from '@/types/vehicle';
+import { DayRecord } from '@/types/work';
 
-const STORAGE_KEY = 'vehicles';
+const KEY = 'work-records';
 
-export function loadVehicles(): Vehicle[] {
-  if (typeof window === 'undefined') return [];
+export function loadRecords(): Record<string, DayRecord> {
+  if (typeof window === 'undefined') return {};
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Vehicle[]) : [];
+    return JSON.parse(localStorage.getItem(KEY) ?? '{}');
   } catch {
-    return [];
+    return {};
   }
 }
 
-export function saveVehicles(vehicles: Vehicle[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(vehicles));
+export function saveRecord(record: DayRecord): void {
+  const all = loadRecords();
+  all[record.date] = record;
+  localStorage.setItem(KEY, JSON.stringify(all));
 }

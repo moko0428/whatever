@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '차량 조회 시스템',
-  description: '차량 조회 시스템',
+  title: 'App',
+  description: '',
 };
 
 export default function RootLayout({
