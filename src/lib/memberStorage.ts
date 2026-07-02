@@ -41,7 +41,8 @@ export async function addApprovedMember(
   passwordHash: string | null,
   rank: string | null,
 ): Promise<void> {
-  await supabase.from('members').upsert({ name, password_hash: passwordHash, rank });
+  const { error } = await supabase.from('members').upsert({ name, password_hash: passwordHash, rank });
+  if (error) console.error('addApprovedMember error:', error.message, error.code);
 }
 
 export async function updateMemberPassword(name: string, passwordHash: string | null): Promise<void> {
