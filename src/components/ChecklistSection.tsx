@@ -167,7 +167,7 @@ export default function ChecklistSection({ checklists, archiveDocs, initialTab, 
         ))}
       </div>
 
-      <ul className="divide-y divide-zinc-50">
+      <ul className="divide-y divide-zinc-50 max-h-64 overflow-y-auto">
         {items.length === 0 && (
           <li className="px-5 py-6 text-sm text-zinc-400 text-center">아래에서 항목을 추가하세요</li>
         )}

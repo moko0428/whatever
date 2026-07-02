@@ -142,7 +142,7 @@ export default function SharedSection({
         )}
       </div>
 
-      <ul className="divide-y divide-zinc-50">
+      <ul className="divide-y divide-zinc-50 max-h-64 overflow-y-auto">
         {items.length === 0 && (
           <li className="px-5 py-6 text-sm text-zinc-400 text-center">등록된 항목이 없습니다</li>
         )}
