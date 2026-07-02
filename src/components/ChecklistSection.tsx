@@ -10,6 +10,7 @@ type ArchiveDoc = { id: string; title: string };
 type Props = {
   checklists: Checklists;
   archiveDocs: ArchiveDoc[];
+  initialTab?: ShiftTab;
   onToggle: (tab: ShiftTab, id: string) => void;
   onAdd: (tab: ShiftTab, text: string, archiveId?: string) => void;
   onRemove: (tab: ShiftTab, id: string) => void;
@@ -59,8 +60,12 @@ function ItemText({ item, docs, checked }: { item: ChecklistItem; docs: ArchiveD
   );
 }
 
-export default function ChecklistSection({ checklists, archiveDocs, onToggle, onAdd, onRemove, onLink }: Props) {
-  const [tab, setTab] = useState<ShiftTab>('A');
+export default function ChecklistSection({ checklists, archiveDocs, initialTab, onToggle, onAdd, onRemove, onLink }: Props) {
+  const [tab, setTab] = useState<ShiftTab>(initialTab ?? 'A');
+
+  useEffect(() => {
+    if (initialTab) setTab(initialTab);
+  }, [initialTab]);
   const [input, setInput] = useState('');
   const [linkingId, setLinkingId] = useState<string | null>(null);
   const [mentionOpen, setMentionOpen] = useState(false);

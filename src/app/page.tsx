@@ -223,6 +223,7 @@ function AppContent({ session }: { session: Session }) {
         <ChecklistSection
           checklists={checklists}
           archiveDocs={archiveDocs}
+          initialTab={shift === 'A' || shift === 'B' || shift === 'C' ? shift : undefined}
           onToggle={handleToggle}
           onAdd={handleAdd}
           onRemove={handleRemove}
