@@ -41,7 +41,7 @@ export default function ArchivePage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h1 className="text-base font-bold text-zinc-900 flex-1">아카이브</h1>
+        <h1 className="text-base font-bold text-zinc-900 flex-1">기본 업무 아카이브</h1>
       </header>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">

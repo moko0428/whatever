@@ -77,14 +77,14 @@ function MarkdownToolbar({
       <div className="w-px h-4 bg-zinc-300 mx-1" />
       <ToolbarButton label="≡" title="목록" onClick={() => apply('\n- ', '', '항목')} />
       <ToolbarButton label="1." title="번호 목록" onClick={() => apply('\n1. ', '', '항목')} />
-      <ToolbarButton label="❝" title="인용" onClick={() => apply('\n> ', '', '인용')} />
+      <ToolbarButton label="인용" title="인용" onClick={() => apply('\n> ', '', '인용')} />
       <ToolbarButton label="`" title="인라인 코드" onClick={() => apply('`', '`', 'code')} />
       <ToolbarButton label="```" title="코드 블록" onClick={() => apply('\n```\n', '\n```', 'code')} />
       <ToolbarButton label="—" title="구분선" onClick={() => apply('\n\n---\n\n')} />
       <div className="w-px h-4 bg-zinc-300 mx-1" />
-      <ToolbarButton label="🔗" title="링크" onClick={() => apply('[', '](url)', '링크 텍스트')} />
+      <ToolbarButton label="링크" title="링크" onClick={() => apply('[', '](url)', '링크 텍스트')} />
       <ToolbarButton
-        label={uploading ? '업로드 중...' : '📷'}
+        label={uploading ? '업로드 중...' : '이미지'}
         title="이미지 삽입"
         onClick={onImageClick}
         disabled={uploading}

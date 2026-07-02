@@ -194,7 +194,7 @@ export default function ChecklistSection({ checklists, archiveDocs, onToggle, on
                 }`}
                 title={item.archiveId ? '링크 변경' : '아카이브 링크'}
               >
-                🔗
+                링크
               </button>
               {linkingId === item.id && (
                 <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-zinc-200 rounded-xl shadow-lg py-1 z-50">
@@ -250,7 +250,7 @@ export default function ChecklistSection({ checklists, archiveDocs, onToggle, on
                     onMouseDown={e => { e.preventDefault(); selectMention(doc); }}
                     className="w-full text-left px-3 py-2 text-xs text-zinc-700 hover:bg-blue-50 hover:text-blue-700 transition-colors truncate"
                   >
-                    📄 {doc.title}
+                    {doc.title}
                   </button>
                 ))
               )}
@@ -273,9 +273,9 @@ export default function ChecklistSection({ checklists, archiveDocs, onToggle, on
               <button
                 onClick={() => setCiteOpen(o => !o)}
                 title="아카이브 인용 삽입"
-                className="text-zinc-300 hover:text-blue-500 transition-colors text-sm"
+                className="text-xs text-zinc-400 hover:text-blue-500 transition-colors"
               >
-                📄
+                @인용
               </button>
               {citeOpen && (
                 <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-zinc-200 rounded-xl shadow-lg py-1 z-50 max-h-48 overflow-y-auto">

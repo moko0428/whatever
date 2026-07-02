@@ -86,7 +86,7 @@ function HeaderMenu({ session }: { session: Session }) {
             onClick={() => setOpen(false)}
             className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors"
           >
-            아카이브
+            기본 업무 아카이브
           </Link>
           {isAdminMember(session.name) && (
             <Link
