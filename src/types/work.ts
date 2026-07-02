@@ -2,6 +2,7 @@ export type ChecklistItem = {
   id: string;
   text: string;
   checked: boolean;
+  archiveId?: string;
 };
 
 export type ShiftTab = 'A' | 'B' | 'C';

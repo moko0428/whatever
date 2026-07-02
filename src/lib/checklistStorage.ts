@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 import { ShiftTab } from '@/types/work';
 
-export type TemplateItem = { id: string; text: string };
+export type TemplateItem = { id: string; text: string; archiveId?: string };
 export type Templates = { [K in ShiftTab]: TemplateItem[] };
 export type CheckedIds = { [K in ShiftTab]: string[] };
 

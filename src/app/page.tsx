@@ -11,6 +11,7 @@ import {
   loadCheckedIds, saveCheckedIds,
   Templates, CheckedIds,
 } from '@/lib/checklistStorage';
+import { loadArchiveDocs, ArchiveDoc } from '@/lib/archiveStorage';
 import { ShiftTab } from '@/types/work';
 import { getShift } from '@/lib/scheduleStorage';
 import { isAdminMember, getMemberRank } from '@/lib/memberStorage';
@@ -80,6 +81,13 @@ function HeaderMenu({ session }: { session: Session }) {
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-1 w-36 bg-white border border-zinc-200 rounded-xl shadow-lg py-1 z-50">
+          <Link
+            href="/archive"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors"
+          >
+            아카이브
+          </Link>
           {isAdminMember(session.name) && (
             <Link
               href="/admin"
@@ -105,6 +113,7 @@ function AppContent({ session }: { session: Session }) {
   const [date, setDate] = useState(todayStr());
   const [templates, setTemplates] = useState<Templates>({ A: [], B: [], C: [] });
   const [checkedIds, setCheckedIds] = useState<CheckedIds>({ A: [], B: [], C: [] });
+  const [archiveDocs, setArchiveDocs] = useState<ArchiveDoc[]>([]);
   const [shift, setShift] = useState<ShiftType | null>(null);
   const [rank, setRank] = useState<string | null>(null);
   const [handoverItems, setHandoverItems] = useState<SharedItem[]>([]);
@@ -113,6 +122,7 @@ function AppContent({ session }: { session: Session }) {
   useEffect(() => {
     getMemberRank(session.name).then(setRank);
     loadTemplates(session.name).then(setTemplates);
+    loadArchiveDocs().then(setArchiveDocs);
   }, [session.name]);
 
   const refreshShared = useCallback(async (d: string) => {
@@ -143,14 +153,20 @@ function AppContent({ session }: { session: Session }) {
     await saveCheckedIds(session.name, date, tab, next);
   }, [checkedIds, session.name, date]);
 
-  const handleAdd = useCallback(async (tab: ShiftTab, text: string) => {
-    const next = [...templates[tab], { id: crypto.randomUUID(), text }];
+  const handleAdd = useCallback(async (tab: ShiftTab, text: string, archiveId?: string) => {
+    const next = [...templates[tab], { id: crypto.randomUUID(), text, ...(archiveId ? { archiveId } : {}) }];
     setTemplates(prev => ({ ...prev, [tab]: next }));
     await saveTemplate(session.name, tab, next);
   }, [templates, session.name]);
 
   const handleRemove = useCallback(async (tab: ShiftTab, id: string) => {
     const next = templates[tab].filter(i => i.id !== id);
+    setTemplates(prev => ({ ...prev, [tab]: next }));
+    await saveTemplate(session.name, tab, next);
+  }, [templates, session.name]);
+
+  const handleLink = useCallback(async (tab: ShiftTab, itemId: string, archiveId: string | null) => {
+    const next = templates[tab].map(i => i.id === itemId ? { ...i, archiveId: archiveId ?? undefined } : i);
     setTemplates(prev => ({ ...prev, [tab]: next }));
     await saveTemplate(session.name, tab, next);
   }, [templates, session.name]);
@@ -206,9 +222,11 @@ function AppContent({ session }: { session: Session }) {
 
         <ChecklistSection
           checklists={checklists}
+          archiveDocs={archiveDocs}
           onToggle={handleToggle}
           onAdd={handleAdd}
           onRemove={handleRemove}
+          onLink={handleLink}
         />
 
         <SharedSection
