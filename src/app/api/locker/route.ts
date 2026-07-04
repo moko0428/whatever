@@ -14,15 +14,21 @@ export async function GET() {
   }
 
   const data = await res.json();
-  const occupied: number[] = (data.occupied ?? []).map(Number);
-  const occupiedSet = new Set(occupied);
+  const occupied: { number: number; department: string; name: string }[] = (data.occupied ?? []).map(
+    (item: { number: unknown; department: unknown; name: unknown }) => ({
+      number: Number(item.number),
+      department: String(item.department ?? ''),
+      name: String(item.name ?? ''),
+    })
+  );
+  const occupiedSet = new Set(occupied.map(o => o.number));
 
   const empty: number[] = [];
   for (let i = 1; i <= totalLockers; i++) {
     if (!occupiedSet.has(i)) empty.push(i);
   }
 
-  return Response.json({ empty, total: totalLockers, occupiedCount: occupied.length });
+  return Response.json({ empty, total: totalLockers, occupied });
 }
 
 export async function POST(request: NextRequest) {
