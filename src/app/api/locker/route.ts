@@ -1,5 +1,30 @@
 import { NextRequest } from 'next/server';
 
+export async function GET() {
+  const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+  const totalLockers = Number(process.env.TOTAL_LOCKERS) || 200;
+
+  if (!scriptUrl) {
+    return Response.json({ error: 'GOOGLE_APPS_SCRIPT_URL not configured' }, { status: 500 });
+  }
+
+  const res = await fetch(scriptUrl, { cache: 'no-store' });
+  if (!res.ok) {
+    return Response.json({ error: '데이터를 불러오는데 실패했습니다.' }, { status: 502 });
+  }
+
+  const data = await res.json();
+  const occupied: number[] = (data.occupied ?? []).map(Number);
+  const occupiedSet = new Set(occupied);
+
+  const empty: number[] = [];
+  for (let i = 1; i <= totalLockers; i++) {
+    if (!occupiedSet.has(i)) empty.push(i);
+  }
+
+  return Response.json({ empty, total: totalLockers, occupiedCount: occupied.length });
+}
+
 export async function POST(request: NextRequest) {
   const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   if (!scriptUrl) {

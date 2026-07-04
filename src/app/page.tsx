@@ -88,6 +88,13 @@ function HeaderMenu({ session }: { session: Session }) {
           >
             기본 업무 아카이브
           </Link>
+          <Link
+            href="/locker/status"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors"
+          >
+            빈 사물함 확인
+          </Link>
           {isAdminMember(session.name) && (
             <Link
               href="/admin"
