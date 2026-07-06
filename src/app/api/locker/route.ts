@@ -66,13 +66,16 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({ department, name, lockerNumber: String(lockerNumber) }),
   });
 
-  if (!res.ok) {
-    return Response.json({ error: '시트 업데이트에 실패했습니다.' }, { status: 502 });
+  const text = await res.text();
+  let data: { error?: string };
+  try {
+    data = JSON.parse(text);
+  } catch {
+    return Response.json({ error: '스크립트 응답 오류 — Apps Script 재배포가 필요할 수 있습니다.' }, { status: 502 });
   }
 
-  const data = await res.json();
-  if (data.error) {
-    return Response.json({ error: data.error }, { status: 502 });
+  if (!res.ok || data.error) {
+    return Response.json({ error: data.error || '시트 업데이트에 실패했습니다.' }, { status: 502 });
   }
 
   return Response.json({ success: true });
