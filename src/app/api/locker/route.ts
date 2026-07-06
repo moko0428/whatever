@@ -14,18 +14,34 @@ export async function GET() {
   }
 
   const data = await res.json();
-  const occupied: { number: number; department: string; name: string }[] = (data.occupied ?? []).map(
-    (item: { number: unknown; department: unknown; name: unknown }) => ({
+
+  type Locker = { number: number; department: string; name: string; startDate: string; endDate: string };
+  const allLockers: Locker[] = (data.lockers ?? []).map(
+    (item: { number: unknown; department: unknown; name: unknown; startDate: unknown; endDate: unknown }) => ({
       number: Number(item.number),
       department: String(item.department ?? ''),
       name: String(item.name ?? ''),
+      startDate: String(item.startDate ?? ''),
+      endDate: String(item.endDate ?? ''),
     })
   );
-  const occupiedSet = new Set(occupied.map(o => o.number));
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const occupied: Locker[] = [];
   const empty: number[] = [];
-  for (let i = 1; i <= totalLockers; i++) {
-    if (!occupiedSet.has(i)) empty.push(i);
+
+  for (const locker of allLockers) {
+    const hasName = locker.name.trim() !== '';
+    const endDate = locker.endDate ? new Date(locker.endDate) : null;
+    const isPastEndDate = endDate !== null && endDate <= today;
+
+    if (hasName && !isPastEndDate) {
+      occupied.push(locker);
+    } else {
+      empty.push(locker.number);
+    }
   }
 
   return Response.json({ empty, total: totalLockers, occupied });
@@ -57,9 +73,6 @@ export async function POST(request: NextRequest) {
   const data = await res.json();
   if (data.error) {
     return Response.json({ error: data.error }, { status: 502 });
-  }
-  if (data.duplicate) {
-    return Response.json({ duplicate: true }, { status: 409 });
   }
 
   return Response.json({ success: true });

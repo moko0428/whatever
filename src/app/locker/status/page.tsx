@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 type LoadStatus = 'loading' | 'done' | 'error';
 type Tab = 'occupied' | 'empty';
-type OccupiedLocker = { number: number; department: string; name: string };
+type OccupiedLocker = { number: number; department: string; name: string; startDate: string; endDate: string };
 
 export default function LockerStatusPage() {
   const router = useRouter();
@@ -95,17 +95,21 @@ export default function LockerStatusPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-zinc-100">
-                        <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 w-16">번호</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 w-12">번호</th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">부서</th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">성함</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">입사일</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">퇴사일</th>
                       </tr>
                     </thead>
                     <tbody>
                       {occupied.map((locker, i) => (
                         <tr key={locker.number} className={i !== occupied.length - 1 ? 'border-b border-zinc-50' : ''}>
                           <td className="px-4 py-3 font-medium text-zinc-900">{locker.number}</td>
-                          <td className="px-4 py-3 text-zinc-600">{locker.department}</td>
-                          <td className="px-4 py-3 text-zinc-600">{locker.name}</td>
+                          <td className="px-4 py-3 text-zinc-600">{locker.department || '—'}</td>
+                          <td className="px-4 py-3 text-zinc-600">{locker.name || '—'}</td>
+                          <td className="px-4 py-3 text-zinc-500 text-xs">{locker.startDate || '—'}</td>
+                          <td className="px-4 py-3 text-zinc-500 text-xs">{locker.endDate || '—'}</td>
                         </tr>
                       ))}
                     </tbody>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-type Status = 'idle' | 'loading' | 'success' | 'duplicate' | 'error';
+type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export default function LockerPage() {
   const [department, setDepartment] = useState('');
@@ -30,10 +30,6 @@ export default function LockerPage() {
       });
 
       const data = await res.json();
-      if (res.status === 409 && data.duplicate) {
-        setStatus('duplicate');
-        return;
-      }
       if (!res.ok) {
         setErrorMsg(data.error || '오류가 발생했습니다.');
         setStatus('error');
@@ -60,39 +56,7 @@ export default function LockerPage() {
           </p>
         </div>
 
-        {status === 'duplicate' ? (
-          <div className="bg-white border border-amber-200 rounded-2xl p-6 text-center shadow-sm">
-            <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg
-                className="w-6 h-6 text-amber-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-                />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-zinc-900">
-              이미 사용 중인 사물함입니다
-            </p>
-            <p className="mt-1.5 text-xs text-zinc-500 leading-relaxed">
-              해당 번호의 사물함은 이미 등록되어 있습니다.
-              <br />
-              보안실에 연락해주세요.
-            </p>
-            <button
-              onClick={() => setStatus('idle')}
-              className="mt-4 w-full py-2.5 text-sm font-medium text-amber-600 border border-amber-200 rounded-lg hover:bg-amber-50 transition-colors"
-            >
-              돌아가기
-            </button>
-          </div>
-        ) : status === 'success' ? (
+        {status === 'success' ? (
           <div className="bg-white border border-zinc-200 rounded-2xl p-6 text-center shadow-sm">
             <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <svg
